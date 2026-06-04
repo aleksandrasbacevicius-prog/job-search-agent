@@ -1,0 +1,26 @@
+{
+  "name": "",
+  "current_title": "",
+  "experience_years": 0,
+  "location": "",
+  "summary": "",
+  "cv_text": "",
+  "target_roles": [],
+  "target_keywords": [],
+  "excluded_keywords": [],
+  "skills": {
+    "technical": [],
+    "soft": [],
+    "languages": []
+  },
+  "location_preferences": {
+    "remote": true,
+    "hybrid": true,
+    "on_site": true,
+    "preferred_locations": []
+  },
+  "seniority": "mid",
+  "cover_letter_tone": "professional",
+  "min_salary": null,
+  "notes": ""
+}

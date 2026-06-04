@@ -1,0 +1,44 @@
+{
+  "sources": [
+    {
+      "id": "nord-security",
+      "name": "Nord Security",
+      "url": "https://nordsecurity.com/jobs",
+      "requires_browser": false,
+      "active": true,
+      "scan_frequency": "daily",
+      "last_scanned": null,
+      "notes": ""
+    },
+    {
+      "id": "ignitis",
+      "name": "Ignitis Group",
+      "url": "https://www.ignitis.eu/en/careers",
+      "requires_browser": true,
+      "active": true,
+      "scan_frequency": "daily",
+      "last_scanned": null,
+      "notes": ""
+    },
+    {
+      "id": "citco",
+      "name": "Citco (Oracle)",
+      "url": "",
+      "requires_browser": true,
+      "active": false,
+      "scan_frequency": "daily",
+      "last_scanned": null,
+      "notes": "Paste your Oracle portal URL and enable when ready"
+    },
+    {
+      "id": "litit",
+      "name": "LIT IT (Oracle)",
+      "url": "",
+      "requires_browser": true,
+      "active": false,
+      "scan_frequency": "daily",
+      "last_scanned": null,
+      "notes": "Paste your Oracle portal URL and enable when ready"
+    }
+  ]
+}
