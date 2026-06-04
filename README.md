@@ -33,7 +33,7 @@ Scanner Agent → Relevance Evaluator → Application Writer → Quality Evaluat
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/job-search-agent.git
+git clone https://github.com/aleksandrasbacevicius-prog/job-search-agent.git
 cd job-search-agent
 pip install -r requirements.txt
 playwright install chromium
