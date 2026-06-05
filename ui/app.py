@@ -35,7 +35,19 @@ def _source_last_scanned_label(source: dict) -> str:
 
 
 def _lines_to_list(text: str) -> list:
-    return [line.strip() for line in text.splitlines() if line.strip()]
+    """
+    Parse a text area into a clean list of strings.
+    Accepts both newline-separated and comma-separated input (or a mix),
+    so "AI Engineer, Data Analyst" and "AI Engineer\nData Analyst" both work.
+    Strips surrounding whitespace and ignores blank entries.
+    """
+    items = []
+    for line in text.splitlines():
+        for part in line.split(","):
+            clean = part.strip()
+            if clean:
+                items.append(clean)
+    return items
 
 
 def _list_to_lines(items: list) -> str:
@@ -220,11 +232,13 @@ def sidebar_sources():
 
     st.divider()
     st.subheader("Add New Source")
-    new_name = st.text_input("Name", placeholder="Company Name")
-    new_url = st.text_input("URL", placeholder="https://company.com/careers")
-    new_browser = st.checkbox("Requires browser (JS rendering)", key="new_browser")
+    with st.form("add_source_form", clear_on_submit=True):
+        new_name = st.text_input("Name", placeholder="Company Name")
+        new_url = st.text_input("URL", placeholder="https://company.com/careers")
+        new_browser = st.checkbox("Requires browser (JS rendering)")
+        submitted = st.form_submit_button("Add Source")
 
-    if st.button("Add Source"):
+    if submitted:
         if new_name and new_url:
             slug = new_name.lower().replace(" ", "-")
             sources.append({
