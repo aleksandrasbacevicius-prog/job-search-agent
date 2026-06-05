@@ -44,6 +44,21 @@ log = logging.getLogger(__name__)
 for _noisy in ("JobSpy", "httpx", "playwright"):
     logging.getLogger(_noisy).setLevel(logging.WARNING)
 
+
+def _ensure_chromium():
+    """Auto-install Chromium if Playwright updated and the binary is missing."""
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as p:
+            b = p.chromium.launch(headless=True)
+            b.close()
+    except Exception as exc:
+        if "Executable doesn't exist" in str(exc):
+            log.info("Chromium binary missing (Playwright updated) — installing now...")
+            import subprocess
+            subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
+            log.info("Chromium installed.")
+
 # ── Frequency helpers ─────────────────────────────────────────────────────────
 
 _FREQ_WINDOWS = {
@@ -75,6 +90,7 @@ def _should_scan(source: dict, force: bool) -> bool:
 def main(force: bool = False) -> int:
     log.info("=" * 60)
     log.info(f"Scan started  {'(forced)' if force else ''}")
+    _ensure_chromium()
 
     try:
         from agents.scanner import load_sources, save_sources

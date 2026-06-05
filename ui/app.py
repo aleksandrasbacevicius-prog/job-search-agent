@@ -1,3 +1,4 @@
+import subprocess
 import sys
 import uuid
 from pathlib import Path
@@ -8,6 +9,28 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 import streamlit as st
+
+
+def _ensure_chromium():
+    """
+    Verify the Playwright Chromium binary exists; auto-install if not.
+    Playwright silently updates its expected binary version on pip upgrade,
+    which breaks JS-rendered scraping until the new binary is downloaded.
+    Runs once per app start — takes <1s when the binary is already present.
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            browser.close()
+    except Exception as exc:
+        if "Executable doesn't exist" in str(exc):
+            with st.spinner("Playwright updated — downloading Chromium (one-time, ~100 MB)..."):
+                subprocess.run(
+                    [sys.executable, "-m", "playwright", "install", "chromium"],
+                    check=True,
+                )
+            st.toast("Chromium installed. Ready to scan JS pages.", icon="✅")
 
 from agents.scanner import load_sources, save_sources
 from pipeline.graph import run_scan
@@ -683,6 +706,7 @@ def main():
     st.set_page_config(page_title="Job Search Agent", layout="wide")
     st.title("Job Search Agent")
 
+    _ensure_chromium()
     init_db()
 
     with st.sidebar:
