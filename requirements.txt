@@ -5,5 +5,6 @@ playwright>=1.48.0
 streamlit>=1.40.0
 python-dotenv>=1.0.0
 openai>=1.40.0
+python-jobspy>=1.1.82  # install with: pip install python-jobspy --no-deps (Python 3.14 compat)
 pypdf>=4.0.0
 python-docx>=1.1.0

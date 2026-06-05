@@ -56,6 +56,91 @@ def _init_chat_state():
 # ---------------------------------------------------------------------------
 # Sidebar: source management
 # ---------------------------------------------------------------------------
+# Sidebar: job board search
+# ---------------------------------------------------------------------------
+
+def sidebar_job_boards():
+    st.header("Job Board Search")
+    settings = load_settings()
+    cfg = settings.get("job_board_search", {})
+    profile = load_profile()
+
+    enabled = st.toggle("Enable", value=cfg.get("enabled", False), key="jb_enabled")
+
+    if not enabled:
+        st.caption("Enable to search LinkedIn and other boards using your target roles.")
+        if not cfg.get("enabled"):
+            # Save disabled state without re-rendering everything
+            return
+        settings["job_board_search"] = {**cfg, "enabled": False}
+        save_settings(settings)
+        return
+
+    st.divider()
+
+    # Search term — default to blank (= use target roles from profile)
+    target_roles = profile.get("target_roles", [])
+    custom = st.text_input(
+        "Custom search term",
+        value=cfg.get("custom_search_term", ""),
+        placeholder="Leave blank to use target roles from profile",
+        key="jb_search_term",
+    )
+    if not custom and target_roles:
+        st.caption(f"Will search: {', '.join(target_roles)}")
+    elif not custom:
+        st.caption("⚠️ No target roles set — add them in the Profile tab or enter a custom term above.")
+
+    location = st.text_input(
+        "Location",
+        value=cfg.get("location", "") or profile.get("location", ""),
+        placeholder="e.g. Lithuania, Vilnius",
+        key="jb_location",
+    )
+
+    col_hours, col_results = st.columns(2)
+    hours_options = [24, 72, 168, 336, 720]
+    hours_val = int(cfg.get("hours_old", 168))
+    hours_old = col_hours.selectbox(
+        "Posted within",
+        hours_options,
+        index=hours_options.index(hours_val) if hours_val in hours_options else 2,
+        format_func=lambda h: f"{h}h" if h < 168 else f"{h // 24}d",
+        key="jb_hours",
+    )
+    results_options = [5, 10, 20, 50]
+    res_val = int(cfg.get("results_per_search", 10))
+    results_per_search = col_results.selectbox(
+        "Results/search",
+        results_options,
+        index=results_options.index(res_val) if res_val in results_options else 1,
+        key="jb_results",
+    )
+
+    st.write("**Boards**")
+    # LinkedIn works reliably for Lithuania; Google/Indeed shown but may return fewer results
+    all_sites = {"linkedin": "LinkedIn", "google": "Google Jobs", "indeed": "Indeed"}
+    active_sites = cfg.get("sites", ["linkedin"])
+    selected_sites = [
+        site for site, label in all_sites.items()
+        if st.checkbox(label, value=site in active_sites, key=f"jb_{site}")
+    ]
+    st.caption("LinkedIn works best for Lithuania. Google/Indeed may return fewer regional results.")
+
+    if st.button("Save", key="jb_save"):
+        settings["job_board_search"] = {
+            "enabled": True,
+            "custom_search_term": custom.strip(),
+            "location": location.strip(),
+            "hours_old": hours_old,
+            "results_per_search": results_per_search,
+            "sites": selected_sites or ["linkedin"],
+        }
+        save_settings(settings)
+        st.success("Saved.")
+
+
+# ---------------------------------------------------------------------------
 # Sidebar: model selection
 # ---------------------------------------------------------------------------
 
@@ -92,30 +177,41 @@ def sidebar_sources():
     for i, source in enumerate(sources):
         label = f"{'✓' if source.get('active') else '✗'} {source['name']}"
         with st.expander(label):
-            col_main, col_del = st.columns([4, 1])
-            with col_main:
-                source["active"] = st.checkbox(
-                    "Active", value=source.get("active", False), key=f"active_{source['id']}"
-                )
-                source["url"] = st.text_input(
-                    "URL", value=source.get("url", ""), key=f"url_{source['id']}"
-                )
-                source["requires_browser"] = st.checkbox(
-                    "Needs browser (JS rendering)",
-                    value=source.get("requires_browser", False),
-                    key=f"browser_{source['id']}",
-                )
-                source["scan_frequency"] = st.selectbox(
-                    "Frequency", ["daily", "weekly"],
-                    index=0 if source.get("scan_frequency") != "weekly" else 1,
-                    key=f"freq_{source['id']}",
-                )
-                st.caption(_source_last_scanned_label(source))
-            with col_del:
-                if st.button("Remove", key=f"remove_{source['id']}"):
+            source["active"] = st.checkbox(
+                "Active", value=source.get("active", False), key=f"active_{source['id']}"
+            )
+            source["url"] = st.text_input(
+                "URL", value=source.get("url", ""), key=f"url_{source['id']}"
+            )
+            source["requires_browser"] = st.checkbox(
+                "Needs browser (JS rendering)",
+                value=source.get("requires_browser", False),
+                key=f"browser_{source['id']}",
+            )
+            source["scan_frequency"] = st.selectbox(
+                "Frequency", ["daily", "weekly"],
+                index=0 if source.get("scan_frequency") != "weekly" else 1,
+                key=f"freq_{source['id']}",
+            )
+            st.caption(_source_last_scanned_label(source))
+
+            # Confirm-before-remove so it can't be triggered by accident
+            if st.session_state.get(f"confirm_remove_{source['id']}"):
+                st.warning(f"Remove **{source['name']}**? This cannot be undone.")
+                col_yes, col_no = st.columns(2)
+                if col_yes.button("Yes, remove", key=f"yes_remove_{source['id']}", type="primary"):
                     sources.pop(i)
                     save_sources(sources)
+                    st.session_state.pop(f"confirm_remove_{source['id']}", None)
                     st.rerun()
+                if col_no.button("Cancel", key=f"no_remove_{source['id']}"):
+                    st.session_state.pop(f"confirm_remove_{source['id']}", None)
+                    st.rerun()
+            else:
+                if st.button("🗑 Remove source", key=f"remove_{source['id']}"):
+                    st.session_state[f"confirm_remove_{source['id']}"] = True
+                    st.rerun()
+
             sources[i] = source
 
     if st.button("Save Sources"):
@@ -577,6 +673,8 @@ def main():
 
     with st.sidebar:
         sidebar_model()
+        st.divider()
+        sidebar_job_boards()
         st.divider()
         sidebar_sources()
 
