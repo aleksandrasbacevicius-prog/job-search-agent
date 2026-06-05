@@ -7,18 +7,18 @@
       "requires_browser": false,
       "active": true,
       "scan_frequency": "daily",
-      "last_scanned": "2026-06-05T08:37:50.958337+00:00",
+      "last_scanned": "2026-06-05T10:01:24.163932+00:00",
       "notes": ""
     },
     {
       "id": "ignitis",
       "name": "Ignitis Group",
-      "url": "https://www.ignitis.eu/en/careers",
-      "requires_browser": true,
+      "url": "https://ignitisgrupe.lt/en/career",
+      "requires_browser": false,
       "active": true,
       "scan_frequency": "daily",
       "last_scanned": null,
-      "notes": ""
+      "notes": "ignitis.eu domain is parked - correct domain is ignitisgrupe.lt"
     },
     {
       "id": "citco",
@@ -47,7 +47,7 @@
       "requires_browser": true,
       "active": true,
       "scan_frequency": "daily",
-      "last_scanned": null,
+      "last_scanned": "2026-06-05T09:49:23.758579+00:00",
       "notes": ""
     }
   ]
