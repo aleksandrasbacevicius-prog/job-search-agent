@@ -1,3 +1,4 @@
+import hashlib
 import json
 import sqlite3
 from datetime import datetime, timezone
@@ -9,6 +10,7 @@ DB_PATH = Path(__file__).parent.parent / "data" / "jobs.db"
 def init_db():
     DB_PATH.parent.mkdir(exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
+
     conn.execute("""
         CREATE TABLE IF NOT EXISTS jobs (
             id TEXT PRIMARY KEY,
@@ -33,14 +35,33 @@ def init_db():
             error TEXT
         )
     """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS applications (
+            id TEXT PRIMARY KEY,
+            job_id TEXT NOT NULL,
+            generated_at TEXT NOT NULL,
+            cv_text TEXT,
+            cover_letter TEXT
+        )
+    """)
+
+    # Migrate: add evaluation columns to jobs if not present
+    existing = {row[1] for row in conn.execute("PRAGMA table_info(jobs)").fetchall()}
+    for col, col_type in [
+        ("relevance_score", "INTEGER"),
+        ("recommendation", "TEXT"),
+        ("evaluation_json", "TEXT"),
+    ]:
+        if col not in existing:
+            conn.execute(f"ALTER TABLE jobs ADD COLUMN {col} {col_type}")
+
     conn.commit()
     conn.close()
 
 
 def get_existing_job_ids() -> set:
     conn = sqlite3.connect(DB_PATH)
-    cursor = conn.execute("SELECT id FROM jobs")
-    ids = {row[0] for row in cursor.fetchall()}
+    ids = {row[0] for row in conn.execute("SELECT id FROM jobs").fetchall()}
     conn.close()
     return ids
 
@@ -95,12 +116,67 @@ def update_job_status(job_id: str, status: str):
     conn.close()
 
 
-def get_recent_jobs(limit: int = 50) -> list:
+def get_recent_jobs(limit: int = 100) -> list:
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
-    cursor = conn.execute(
-        "SELECT * FROM jobs ORDER BY discovered_at DESC LIMIT ?", (limit,)
-    )
-    rows = [dict(row) for row in cursor.fetchall()]
+    rows = [
+        dict(row) for row in
+        conn.execute("SELECT * FROM jobs ORDER BY discovered_at DESC LIMIT ?", (limit,)).fetchall()
+    ]
     conn.close()
     return rows
+
+
+# ── Evaluation ────────────────────────────────────────────────────────────────
+
+def save_evaluation(job_id: str, evaluation: dict):
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute(
+        "UPDATE jobs SET relevance_score=?, recommendation=?, evaluation_json=? WHERE id=?",
+        (
+            evaluation.get("score"),
+            evaluation.get("recommendation"),
+            json.dumps(evaluation),
+            job_id,
+        ),
+    )
+    conn.commit()
+    conn.close()
+
+
+def get_evaluation(job_id: str) -> dict | None:
+    conn = sqlite3.connect(DB_PATH)
+    row = conn.execute(
+        "SELECT evaluation_json FROM jobs WHERE id=?", (job_id,)
+    ).fetchone()
+    conn.close()
+    if row and row[0]:
+        return json.loads(row[0])
+    return None
+
+
+# ── Applications ──────────────────────────────────────────────────────────────
+
+def save_application(job_id: str, cv_text: str, cover_letter: str) -> str:
+    app_id = hashlib.sha256(
+        f"{job_id}:{datetime.now(timezone.utc).isoformat()}".encode()
+    ).hexdigest()[:16]
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute(
+        "INSERT INTO applications (id, job_id, generated_at, cv_text, cover_letter) VALUES (?,?,?,?,?)",
+        (app_id, job_id, datetime.now(timezone.utc).isoformat(), cv_text, cover_letter),
+    )
+    conn.commit()
+    conn.close()
+    return app_id
+
+
+def get_latest_application(job_id: str) -> dict | None:
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    row = conn.execute(
+        "SELECT * FROM applications WHERE job_id=? ORDER BY generated_at DESC LIMIT 1",
+        (job_id,),
+    ).fetchone()
+    conn.close()
+    return dict(row) if row else None

@@ -34,7 +34,10 @@ def _ensure_chromium():
 
 from agents.scanner import load_sources, save_sources
 from pipeline.graph import run_scan
-from utils.db import get_recent_jobs, init_db, update_job_status
+from utils.db import (
+    get_evaluation, get_latest_application, get_recent_jobs,
+    init_db, save_application, save_evaluation, update_job_status,
+)
 from utils.llm import PROVIDER_MODELS
 from utils.profile import load_profile, save_profile
 from utils.settings import load_settings, save_settings
@@ -585,11 +588,124 @@ _STATUS_BADGE = {
 }
 
 
+_REC_BADGE = {"apply": "🟢 Apply", "stretch": "🟡 Stretch", "skip": "🔴 Skip"}
+_REC_COLOUR = {"apply": "🟢", "stretch": "🟡", "skip": "🔴"}
+
+
 def _on_status_change(job_id: str):
     update_job_status(job_id, st.session_state[f"status_{job_id}"])
 
 
-def _render_job_list(jobs: list):
+def _render_job_card(job: dict, profile: dict):
+    evaluation = get_evaluation(job["id"])
+    application = get_latest_application(job["id"])
+
+    # ── Top row: apply link + status selector ────────────────────────────────
+    col_link, col_status = st.columns([3, 1])
+    with col_link:
+        if job.get("url"):
+            st.link_button("Apply →", job["url"], type="primary")
+        else:
+            st.caption("No direct URL.")
+    with col_status:
+        job_status = job.get("status", "new")
+        st.selectbox(
+            "Status",
+            _JOB_STATUSES,
+            index=_JOB_STATUSES.index(job_status) if job_status in _JOB_STATUSES else 0,
+            format_func=lambda s: _STATUS_LABEL[s],
+            key=f"status_{job['id']}",
+            on_change=_on_status_change,
+            args=(job["id"],),
+            label_visibility="collapsed",
+        )
+
+    st.caption(f"📅 {job['discovered_at'][:10]}  ·  {job['source_id']}")
+
+    if job.get("description"):
+        with st.expander("Job description"):
+            st.write(job["description"])
+
+    # ── Fit evaluation ───────────────────────────────────────────────────────
+    st.divider()
+
+    if evaluation:
+        score = evaluation["score"]
+        rec = evaluation["recommendation"]
+        col_score, col_rec = st.columns([1, 2])
+        col_score.metric("Fit score", f"{score}/100")
+        col_rec.write(f"**{_REC_BADGE.get(rec, rec)}**")
+        st.write(evaluation.get("summary", ""))
+
+        col_s, col_g = st.columns(2)
+        with col_s:
+            if evaluation.get("strengths"):
+                st.write("**Strengths**")
+                for s in evaluation["strengths"]:
+                    st.write(f"- {s}")
+        with col_g:
+            if evaluation.get("gaps"):
+                st.write("**Gaps**")
+                for g in evaluation["gaps"]:
+                    st.write(f"- {g}")
+
+        col_re, col_wa = st.columns([1, 2])
+        if col_re.button("Re-evaluate", key=f"re_eval_{job['id']}"):
+            with st.spinner("Re-evaluating..."):
+                from agents.relevance_eval import evaluate_job
+                result = evaluate_job(job, profile)
+                save_evaluation(job["id"], result)
+            st.rerun()
+
+        if rec != "skip" and col_wa.button(
+            "✍️ Write Application", key=f"write_{job['id']}", type="primary"
+        ):
+            with st.spinner("Writing tailored CV and cover letter — takes ~30s..."):
+                from agents.app_writer import write_application
+                result = write_application(job, profile, evaluation)
+                save_application(job["id"], result["cv"], result["cover_letter"])
+            st.rerun()
+
+    else:
+        if not profile.get("cv_text"):
+            st.caption("⚠️ Add your CV in the Profile tab to enable evaluation.")
+        elif st.button("🔍 Evaluate Fit", key=f"eval_{job['id']}"):
+            with st.spinner("Evaluating fit against your profile..."):
+                from agents.relevance_eval import evaluate_job
+                result = evaluate_job(job, profile)
+                save_evaluation(job["id"], result)
+            st.rerun()
+
+    # ── Generated application ─────────────────────────────────────────────────
+    if application:
+        st.divider()
+        cv_tab, cl_tab = st.tabs(["📄 Tailored CV", "✉️ Cover Letter"])
+        with cv_tab:
+            st.text_area(
+                "Copy and edit as needed",
+                value=application["cv_text"],
+                height=400,
+                key=f"cv_text_{job['id']}",
+                label_visibility="collapsed",
+            )
+        with cl_tab:
+            st.text_area(
+                "Copy and edit as needed",
+                value=application["cover_letter"],
+                height=300,
+                key=f"cl_text_{job['id']}",
+                label_visibility="collapsed",
+            )
+        if st.button("Regenerate application", key=f"regen_{job['id']}"):
+            if evaluation:
+                with st.spinner("Regenerating..."):
+                    from agents.app_writer import write_application
+                    result = write_application(job, profile, evaluation)
+                    save_application(job["id"], result["cv"], result["cover_letter"])
+                st.rerun()
+
+
+def _render_job_list(jobs: list, profile: dict):
     col_src, col_status = st.columns(2)
     source_ids = sorted({j["source_id"] for j in jobs})
     filter_source = col_src.selectbox("Source", ["All"] + source_ids)
@@ -609,37 +725,16 @@ def _render_job_list(jobs: list):
 
     for job in filtered:
         job_status = job.get("status", "new")
-        badge = _STATUS_BADGE.get(job_status, "")
-        label = f"{badge}{job['title']} — {job['company']}"
+        rec = job.get("recommendation")
+        # Score badge in header if evaluated
+        eval_badge = f"  {_REC_COLOUR[rec]}" if rec in _REC_COLOUR else ""
+        status_badge = _STATUS_BADGE.get(job_status, "")
+        label = f"{status_badge}{job['title']} — {job['company']}{eval_badge}"
         if job.get("location"):
             label += f"  ·  {job['location']}"
 
         with st.expander(label):
-            top_left, top_right = st.columns([3, 1])
-
-            with top_left:
-                if job.get("url"):
-                    st.link_button("Apply →", job["url"], type="primary")
-                else:
-                    st.caption("No direct URL — check the source site.")
-
-            with top_right:
-                current_idx = _JOB_STATUSES.index(job_status) if job_status in _JOB_STATUSES else 0
-                st.selectbox(
-                    "Status",
-                    _JOB_STATUSES,
-                    index=current_idx,
-                    format_func=lambda s: _STATUS_LABEL[s],
-                    key=f"status_{job['id']}",
-                    on_change=_on_status_change,
-                    args=(job["id"],),
-                    label_visibility="collapsed",
-                )
-
-            if job.get("description"):
-                st.write(job["description"])
-
-            st.caption(f"Discovered {job['discovered_at'][:10]}  ·  source: {job['source_id']}")
+            _render_job_card(job, profile)
 
 
 # ---------------------------------------------------------------------------
@@ -695,7 +790,7 @@ def tab_scan():
         st.info("No jobs yet — configure your sources in the sidebar and click Scan Now.")
         return
 
-    _render_job_list(jobs)
+    _render_job_list(jobs, profile)
 
 
 # ---------------------------------------------------------------------------
