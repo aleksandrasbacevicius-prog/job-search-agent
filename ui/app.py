@@ -592,6 +592,33 @@ _REC_BADGE = {"apply": "🟢 Apply", "stretch": "🟡 Stretch", "skip": "🔴 Sk
 _REC_COLOUR = {"apply": "🟢", "stretch": "🟡", "skip": "🔴"}
 
 
+def _filename_slug(company: str, title: str) -> str:
+    """Make a safe filename component from company + job title."""
+    import re
+    raw = f"{company}_{title}"
+    return re.sub(r"[^\w\-]", "_", raw)[:60].strip("_")
+
+
+def _to_docx(text: str) -> bytes:
+    """Convert plain text to a .docx file (in memory) with basic paragraph structure."""
+    from io import BytesIO
+    from docx import Document
+    from docx.shared import Pt
+
+    doc = Document()
+    # Remove default blank first paragraph Word adds
+    for para in doc.paragraphs:
+        para.clear()
+
+    for line in text.splitlines():
+        p = doc.add_paragraph(line)
+        p.paragraph_format.space_after = Pt(0)
+
+    buf = BytesIO()
+    doc.save(buf)
+    return buf.getvalue()
+
+
 def _on_status_change(job_id: str):
     update_job_status(job_id, st.session_state[f"status_{job_id}"])
 
@@ -680,22 +707,59 @@ def _render_job_card(job: dict, profile: dict):
     if application:
         st.divider()
         cv_tab, cl_tab = st.tabs(["📄 Tailored CV", "✉️ Cover Letter"])
+
+        slug = _filename_slug(job.get("company", ""), job.get("title", ""))
+
         with cv_tab:
+            cv_text = application["cv_text"] or ""
             st.text_area(
-                "Copy and edit as needed",
-                value=application["cv_text"],
+                "Edit before downloading",
+                value=cv_text,
                 height=400,
                 key=f"cv_text_{job['id']}",
                 label_visibility="collapsed",
             )
+            dl1, dl2 = st.columns(2)
+            dl1.download_button(
+                "⬇️ Download CV (.txt)",
+                data=cv_text,
+                file_name=f"CV_{slug}.txt",
+                mime="text/plain",
+                key=f"dl_cv_txt_{job['id']}",
+            )
+            dl2.download_button(
+                "⬇️ Download CV (.docx)",
+                data=_to_docx(cv_text),
+                file_name=f"CV_{slug}.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                key=f"dl_cv_docx_{job['id']}",
+            )
+
         with cl_tab:
+            cl_text = application["cover_letter"] or ""
             st.text_area(
-                "Copy and edit as needed",
-                value=application["cover_letter"],
+                "Edit before downloading",
+                value=cl_text,
                 height=300,
                 key=f"cl_text_{job['id']}",
                 label_visibility="collapsed",
             )
+            dl3, dl4 = st.columns(2)
+            dl3.download_button(
+                "⬇️ Download Cover Letter (.txt)",
+                data=cl_text,
+                file_name=f"CoverLetter_{slug}.txt",
+                mime="text/plain",
+                key=f"dl_cl_txt_{job['id']}",
+            )
+            dl4.download_button(
+                "⬇️ Download Cover Letter (.docx)",
+                data=_to_docx(cl_text),
+                file_name=f"CoverLetter_{slug}.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                key=f"dl_cl_docx_{job['id']}",
+            )
+
         if st.button("Regenerate application", key=f"regen_{job['id']}"):
             if evaluation:
                 with st.spinner("Regenerating..."):
