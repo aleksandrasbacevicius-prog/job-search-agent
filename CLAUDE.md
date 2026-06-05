@@ -47,6 +47,44 @@ Either use the sidebar in the UI, or edit `config/sources.json` directly:
 }
 ```
 
+## Commit message format
+
+```
+type: short imperative summary (≤72 chars)
+
+- file/module: what changed and why
+- only list files where the change is non-obvious from the summary
+```
+
+**Types:** `feat` · `fix` · `refactor` · `config` · `docs` · `chore`
+
+**Rules:**
+- Subject line is imperative mood ("add X", not "added X" or "adds X")
+- Body bullets are `file: reason`, not just `file: changed`
+- Skip bullets for trivial touches (formatting, typos) unless they're the whole point
+- One blank line between subject and body
+- End with `Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>` on AI-assisted commits
+
+**Examples:**
+
+```
+feat: add LinkedIn search via jobspy
+
+- agents/job_board_scanner.py: new LangGraph node; searches each target role
+- pipeline/graph.py: chain url_scanner → job_board_scanner → END
+- ui/app.py: Job Board Search sidebar with toggle and per-site checkboxes
+```
+
+```
+fix: correct Nord Security careers URL (404)
+
+- config/sources.json: /jobs → /careers; verified 200 response
+```
+
+```
+config: add Vinted as active source
+```
+
 ## Next agents to build
 
 1. **Relevance Evaluator** — scores each job against user profile, outputs fit score + gap analysis

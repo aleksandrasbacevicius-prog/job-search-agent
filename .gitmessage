@@ -1,0 +1,10 @@
+# type: short imperative summary (≤72 chars)
+# Types: feat | fix | refactor | config | docs | chore
+#
+# - file/module: what changed and why
+# - only list files where the change isn't obvious from the summary
+#
+# Examples:
+#   feat: add relevance evaluator agent
+#   fix: handle empty target_roles in job board scanner
+#   config: enable Vinted source, set hours_old to 336
