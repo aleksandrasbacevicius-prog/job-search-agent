@@ -1,4 +1,16 @@
 {
   "provider": "openai",
-  "model": "gpt-4o-mini"
+  "model": "gpt-4o-mini",
+  "job_board_search": {
+    "enabled": true,
+    "custom_search_term": "https://career.oxylabs.io/?loc=Vilnius#jobs",
+    "location": "Vilnius, Lithuania",
+    "hours_old": 168,
+    "results_per_search": 10,
+    "sites": [
+      "linkedin",
+      "google",
+      "indeed"
+    ]
+  }
 }

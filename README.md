@@ -11,8 +11,8 @@ Scanner Agent → Relevance Evaluator → Application Writer → Quality Evaluat
 | Stage | Status | Description |
 |---|---|---|
 | Scanner Agent | ✅ Built | Scrapes configured career pages daily, deduplicates, stores to SQLite |
-| Relevance Evaluator | 🔜 Next | Scores each job against your profile — fit score + gap analysis |
-| Application Writer | 🔜 Planned | Generates bespoke CV + cover letter per role |
+| Relevance Evaluator | ✅ Built  | Scores each job against your profile — fit score + gap analysis |
+| Application Writer | ✅ Built  | Generates bespoke CV + cover letter per role |
 | Quality Evaluator | 🔜 Planned | LLM-as-judge loop critiquing the Application Writer's output |
 | Interview Prep | 🔜 Planned | Role-specific question bank + suggested answers |
 | Feedback Loop | 🔜 Planned | Tracks outcomes, self-improves the relevance scoring over time |

@@ -1,0 +1,185 @@
+2026-06-05 12:49  INFO      ============================================================
+2026-06-05 12:49  INFO      Scan started  
+2026-06-05 12:49  INFO      Skipping (not due yet): Nord Security
+2026-06-05 12:49  WARNING     Ignitis Group: ERROR — Page.goto: net::ERR_SSL_UNRECOGNIZED_NAME_ALERT at https://www.ignitis.eu/en/careers
+Call log:
+  - navigating to "https://www.ignitis.eu/en/careers", waiting until "networkidle"
+
+2026-06-05 12:49  INFO        Vinted: 0 found, 0 new
+2026-06-05 12:49  ERROR       Ignitis Group: Page.goto: net::ERR_SSL_UNRECOGNIZED_NAME_ALERT at https://www.ignitis.eu/en/careers
+Call log:
+  - navigating to "https://www.ignitis.eu/en/careers", waiting until "networkidle"
+
+2026-06-05 12:49  INFO      Scan complete — 0 new job(s) across 2 source(s)
+2026-06-05 13:04  INFO      ============================================================
+2026-06-05 13:04  INFO      Scan started  
+2026-06-05 13:04  INFO      Skipping (not due yet): Nord Security, Vinted
+2026-06-05 13:04  WARNING     Ignitis Group: ERROR — Page.goto: net::ERR_SSL_UNRECOGNIZED_NAME_ALERT at https://www.ignitis.eu/en/careers
+Call log:
+  - navigating to "https://www.ignitis.eu/en/careers", waiting until "networkidle"
+
+2026-06-05 13:04  INFO        LinkedIn: 30 found, 5 new
+2026-06-05 13:04  INFO        Google Jobs: 0 found, 0 new
+2026-06-05 13:04  INFO        Indeed: 0 found, 0 new
+2026-06-05 13:04  ERROR       Ignitis Group: Page.goto: net::ERR_SSL_UNRECOGNIZED_NAME_ALERT at https://www.ignitis.eu/en/careers
+Call log:
+  - navigating to "https://www.ignitis.eu/en/careers", waiting until "networkidle"
+
+2026-06-05 13:04  INFO      Scan complete — 5 new job(s) across 4 source(s)
+2026-06-06 11:54  INFO      ============================================================
+2026-06-06 11:54  INFO      Scan started  
+2026-06-06 11:54  INFO      Skipping (not due yet): Nord Security, Ignitis Group, Vinted, Vinted 2
+2026-06-06 11:55  WARNING   Retrying (Retry(total=2, connect=2, read=None, redirect=None, status=3)) after connection broken by 'NameResolutionError("HTTPSConnection(host='www.linkedin.com', port=443): Failed to resolve 'www.linkedin.com' ([Errno 11001] getaddrinfo failed)")': /jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=AI+Engineer&location=Vilnius%2C+Lithuania&distance=50&pageNum=0&start=0&f_TPR=r604800
+2026-06-06 11:55  WARNING   Retrying (Retry(total=1, connect=1, read=None, redirect=None, status=3)) after connection broken by 'NameResolutionError("HTTPSConnection(host='www.linkedin.com', port=443): Failed to resolve 'www.linkedin.com' ([Errno 11001] getaddrinfo failed)")': /jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=AI+Engineer&location=Vilnius%2C+Lithuania&distance=50&pageNum=0&start=0&f_TPR=r604800
+2026-06-06 11:55  INFO        LinkedIn: 30 found, 3 new
+2026-06-06 11:55  INFO        Google Jobs: 0 found, 0 new
+2026-06-06 11:55  INFO        Indeed: 0 found, 0 new
+2026-06-06 11:55  INFO      Scan complete — 3 new job(s) across 3 source(s)
+2026-06-07 16:30  INFO      ============================================================
+2026-06-07 16:30  INFO      Scan started  
+2026-06-07 16:31  INFO        Nord Security: 0 found, 0 new
+2026-06-07 16:31  INFO        Ignitis Group: 0 found, 0 new
+2026-06-07 16:31  INFO        Vinted: 0 found, 0 new
+2026-06-07 16:31  INFO        Vinted 2: 0 found, 0 new
+2026-06-07 16:31  INFO        LinkedIn: 30 found, 5 new
+2026-06-07 16:31  INFO        Google Jobs: 0 found, 0 new
+2026-06-07 16:31  INFO        Indeed: 0 found, 0 new
+2026-06-07 16:31  INFO      Scan complete — 5 new job(s) across 7 source(s)
+2026-06-09 09:54  INFO      ============================================================
+2026-06-09 09:54  INFO      Scan started  
+2026-06-09 09:56  INFO        Nord Security: 0 found, 0 new
+2026-06-09 09:56  INFO        Ignitis Group: 1 found, 1 new
+2026-06-09 09:56  INFO        Vinted: 0 found, 0 new
+2026-06-09 09:56  INFO        Vinted 2: 0 found, 0 new
+2026-06-09 09:56  INFO        LinkedIn: 30 found, 7 new
+2026-06-09 09:56  INFO        Google Jobs: 0 found, 0 new
+2026-06-09 09:56  INFO        Indeed: 0 found, 0 new
+2026-06-09 09:56  INFO      Scan complete — 8 new job(s) across 7 source(s)
+2026-06-11 12:50  INFO      ============================================================
+2026-06-11 12:50  INFO      Scan started  
+2026-06-11 12:51  INFO        Nord Security: 0 found, 0 new
+2026-06-11 12:51  INFO        Ignitis Group: 2 found, 2 new
+2026-06-11 12:51  INFO        Vinted: 0 found, 0 new
+2026-06-11 12:51  INFO        Vinted 2: 0 found, 0 new
+2026-06-11 12:51  INFO        LinkedIn: 30 found, 15 new
+2026-06-11 12:51  INFO        Google Jobs: 0 found, 0 new
+2026-06-11 12:51  INFO        Indeed: 0 found, 0 new
+2026-06-11 12:51  INFO      Scan complete — 17 new job(s) across 7 source(s)
+2026-06-15 08:36  INFO      ============================================================
+2026-06-15 08:36  INFO      Scan started  
+2026-06-16 09:25  INFO      ============================================================
+2026-06-16 09:25  INFO      Scan started  
+2026-06-17 15:56  INFO      ============================================================
+2026-06-17 15:56  INFO      Scan started  
+2026-06-17 15:57  INFO        Nord Security: 1 found, 1 new
+2026-06-17 15:57  INFO        Ignitis Group: 0 found, 0 new
+2026-06-17 15:57  INFO        Vinted: 0 found, 0 new
+2026-06-17 15:57  INFO        Vinted 2: 0 found, 0 new
+2026-06-17 15:57  INFO        LinkedIn: 30 found, 12 new
+2026-06-17 15:57  INFO        Google Jobs: 0 found, 0 new
+2026-06-17 15:57  INFO        Indeed: 0 found, 0 new
+2026-06-17 15:57  INFO      Scan complete — 13 new job(s) across 7 source(s)
+2026-06-19 08:50  INFO      ============================================================
+2026-06-19 08:50  INFO      Scan started  
+2026-06-19 08:51  INFO        Nord Security: 1 found, 1 new
+2026-06-19 08:51  INFO        Ignitis Group: 0 found, 0 new
+2026-06-19 08:51  INFO        Vinted: 0 found, 0 new
+2026-06-19 08:51  INFO        Vinted 2: 0 found, 0 new
+2026-06-19 08:51  INFO        LinkedIn: 30 found, 9 new
+2026-06-19 08:51  INFO        Google Jobs: 0 found, 0 new
+2026-06-19 08:51  INFO        Indeed: 0 found, 0 new
+2026-06-19 08:51  INFO      Scan complete — 10 new job(s) across 7 source(s)
+2026-06-19 08:55  INFO      ============================================================
+2026-06-19 08:55  INFO      Scan started  
+2026-06-19 08:55  INFO      Skipping (not due yet): Nord Security, Ignitis Group, Vinted, Vinted 2
+2026-06-19 08:55  INFO        LinkedIn: 30 found, 4 new
+2026-06-19 08:55  INFO        Google Jobs: 0 found, 0 new
+2026-06-19 08:55  INFO        Indeed: 0 found, 0 new
+2026-06-19 08:55  INFO      Scan complete — 4 new job(s) across 3 source(s)
+2026-06-21 14:52  INFO      ============================================================
+2026-06-21 14:52  INFO      Scan started  
+2026-06-21 14:54  INFO        Nord Security: 1 found, 1 new
+2026-06-21 14:54  INFO        Ignitis Group: 3 found, 3 new
+2026-06-21 14:54  INFO        Vinted: 2 found, 2 new
+2026-06-21 14:54  INFO        Vinted 2: 0 found, 0 new
+2026-06-21 14:54  INFO        LinkedIn: 30 found, 15 new
+2026-06-21 14:54  INFO        Google Jobs: 0 found, 0 new
+2026-06-21 14:54  INFO        Indeed: 0 found, 0 new
+2026-06-21 14:54  INFO      Scan complete — 21 new job(s) across 7 source(s)
+2026-06-21 14:57  INFO      ============================================================
+2026-06-21 14:57  INFO      Scan started  
+2026-06-21 14:57  INFO      Skipping (not due yet): Nord Security, Ignitis Group, Vinted, Vinted 2
+2026-06-21 14:58  INFO        LinkedIn: 30 found, 8 new
+2026-06-21 14:58  INFO        Google Jobs: 0 found, 0 new
+2026-06-21 14:58  INFO        Indeed: 0 found, 0 new
+2026-06-21 14:58  INFO      Scan complete — 8 new job(s) across 3 source(s)
+2026-06-22 08:00  INFO      ============================================================
+2026-06-22 08:00  INFO      Scan started  
+2026-06-22 08:00  INFO      Skipping (not due yet): Nord Security, Ignitis Group, Vinted, Vinted 2
+2026-06-22 08:00  INFO        LinkedIn: 30 found, 3 new
+2026-06-22 08:00  INFO        Google Jobs: 0 found, 0 new
+2026-06-22 08:00  INFO        Indeed: 0 found, 0 new
+2026-06-22 08:00  INFO      Scan complete — 3 new job(s) across 3 source(s)
+2026-06-23 08:44  INFO      ============================================================
+2026-06-23 08:44  INFO      Scan started  
+2026-06-30 18:08  INFO      ============================================================
+2026-06-30 18:08  INFO      Scan started  
+2026-06-30 18:09  INFO        Nord Security: 2 found, 2 new
+2026-06-30 18:09  INFO        Ignitis Group: 1 found, 1 new
+2026-06-30 18:09  INFO        Vinted: 0 found, 0 new
+2026-06-30 18:09  INFO        Vinted 2: 0 found, 0 new
+2026-06-30 18:09  INFO        LinkedIn: 30 found, 18 new
+2026-06-30 18:09  INFO        Google Jobs: 0 found, 0 new
+2026-06-30 18:09  INFO        Indeed: 0 found, 0 new
+2026-06-30 18:09  INFO      Scan complete — 21 new job(s) across 7 source(s)
+2026-07-04 20:16  INFO      ============================================================
+2026-07-04 20:16  INFO      Scan started  
+2026-07-05 08:00  INFO      ============================================================
+2026-07-05 08:00  INFO      Scan started  
+2026-07-07 13:20  INFO      ============================================================
+2026-07-07 13:20  INFO      Scan started  
+2026-07-07 13:22  INFO        Nord Security: 2 found, 1 new
+2026-07-07 13:22  INFO        Ignitis Group: 0 found, 0 new
+2026-07-07 13:22  WARNING     Vinted: ERROR — Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://careers.vinted.com/jobs?page=1", waiting until "networkidle"
+
+2026-07-07 13:22  WARNING     Vinted 2: ERROR — Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://careers.vinted.com/jobs?page=6", waiting until "networkidle"
+
+2026-07-07 13:22  INFO        LinkedIn: 30 found, 21 new
+2026-07-07 13:22  INFO        Google Jobs: 0 found, 0 new
+2026-07-07 13:22  INFO        Indeed: 0 found, 0 new
+2026-07-07 13:22  ERROR       Vinted: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://careers.vinted.com/jobs?page=1", waiting until "networkidle"
+
+2026-07-07 13:22  ERROR       Vinted 2: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://careers.vinted.com/jobs?page=6", waiting until "networkidle"
+
+2026-07-07 13:22  INFO      Scan complete — 22 new job(s) across 7 source(s)
+2026-07-08 13:05  INFO      ============================================================
+2026-07-08 13:05  INFO      Scan started  
+2026-07-09 12:43  INFO      ============================================================
+2026-07-09 12:43  INFO      Scan started  
+2026-07-09 12:43  INFO      Skipping (not due yet): Nord Security, Ignitis Group, Vinted, Vinted 2, oxylabs, oxy1
+2026-07-09 12:43  INFO        LinkedIn: 10 found, 9 new
+2026-07-09 12:43  INFO        Google Jobs: 0 found, 0 new
+2026-07-09 12:43  INFO        Indeed: 0 found, 0 new
+2026-07-09 12:43  INFO      Scan complete — 9 new job(s) across 3 source(s)
+2026-07-10 21:53  INFO      ============================================================
+2026-07-10 21:53  INFO      Scan started  
+2026-07-10 21:55  INFO        Nord Security: 0 found, 0 new
+2026-07-10 21:55  INFO        Ignitis Group: 0 found, 0 new
+2026-07-10 21:55  INFO        Vinted: 0 found, 0 new
+2026-07-10 21:55  INFO        Vinted 2: 0 found, 0 new
+2026-07-10 21:55  INFO        oxylabs: 6 found, 0 new
+2026-07-10 21:55  INFO        oxy1: 1 found, 0 new
+2026-07-10 21:55  INFO        LinkedIn: 10 found, 4 new
+2026-07-10 21:55  INFO        Google Jobs: 0 found, 0 new
+2026-07-10 21:55  INFO        Indeed: 0 found, 0 new
+2026-07-10 21:55  INFO      Scan complete — 4 new job(s) across 9 source(s)
+2026-07-13 09:24  INFO      ============================================================
+2026-07-13 09:24  INFO      Scan started  

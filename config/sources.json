@@ -7,7 +7,7 @@
       "requires_browser": false,
       "active": true,
       "scan_frequency": "daily",
-      "last_scanned": "2026-06-05T10:01:24.163932+00:00",
+      "last_scanned": "2026-07-10T18:54:05.418495+00:00",
       "notes": ""
     },
     {
@@ -17,7 +17,7 @@
       "requires_browser": false,
       "active": true,
       "scan_frequency": "daily",
-      "last_scanned": null,
+      "last_scanned": "2026-07-10T18:54:08.279934+00:00",
       "notes": "ignitis.eu domain is parked - correct domain is ignitisgrupe.lt"
     },
     {
@@ -47,7 +47,37 @@
       "requires_browser": true,
       "active": true,
       "scan_frequency": "daily",
-      "last_scanned": "2026-06-05T09:49:23.758579+00:00",
+      "last_scanned": "2026-07-10T18:54:32.229656+00:00",
+      "notes": ""
+    },
+    {
+      "id": "vinted-2-3787",
+      "name": "Vinted 2",
+      "url": "https://careers.vinted.com/jobs?page=6",
+      "requires_browser": true,
+      "active": true,
+      "scan_frequency": "daily",
+      "last_scanned": "2026-07-10T18:54:54.895387+00:00",
+      "notes": ""
+    },
+    {
+      "id": "oxylabs-f071",
+      "name": "oxylabs",
+      "url": "https://career.oxylabs.io/?loc=Vilnius#jobs",
+      "requires_browser": false,
+      "active": true,
+      "scan_frequency": "daily",
+      "last_scanned": "2026-07-10T18:55:02.124276+00:00",
+      "notes": ""
+    },
+    {
+      "id": "oxy1-9115",
+      "name": "oxy1",
+      "url": "https://career.oxylabs.io/job/3bb4ab52/junior-technical-researcher/",
+      "requires_browser": false,
+      "active": true,
+      "scan_frequency": "daily",
+      "last_scanned": "2026-07-10T18:55:05.820654+00:00",
       "notes": ""
     }
   ]
